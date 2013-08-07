@@ -1,0 +1,14 @@
+{
+  "name": "static-eval",
+  "repo": "karlbohlmark/static-eval",
+  "description": "Evaulate simple js expressions",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}
