@@ -53,7 +53,7 @@ module.exports = function (ast, vars) {
             return FAIL;
         }
         else if (node.type === 'Identifier') {
-            if ({}.hasOwnProperty.call(vars, node.name)) {
+            if (node.name in vars) {
                 return vars[node.name];
             }
             else return FAIL;
