@@ -1,5 +1,8 @@
-module.exports = function (ast, vars) {
-    if (!vars) vars = {};
+module.exports = function (ast, scopeChain) {
+    if (!scopeChain) scopeChain = {
+	has: function () { return false; },
+	lookup: function () { return void(0); }
+    };
     var FAIL = {};
     
     var result = (function walk (node) {
@@ -65,10 +68,9 @@ module.exports = function (ast, vars) {
             return FAIL;
         }
         else if (node.type === 'Identifier') {
-	    if (node.name in vars) {
-                return vars[node.name];
-            }
-            else return FAIL;
+            if (scopeChain.has(node.name)) {
+                return scopeChain.lookup(node.name)
+            } else return FAIL;
         }
         else if (node.type === 'CallExpression') {
 	    var ctx = null
