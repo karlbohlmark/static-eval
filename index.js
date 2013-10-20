@@ -89,13 +89,14 @@ module.exports = function (ast, scopeChain) {
             }
             else return FAIL;
         }
-        else if (node.type === 'MemberExpression') {
-            var obj = walk(node.object);
-            if (obj === FAIL) return FAIL;
-	    if (node.property.type === 'Identifier' && obj) {
-                return obj[node.property.name];
-            }
-            var prop = walk(node.property);
+	else if (node.type === 'MemberExpression') {
+	    var obj = walk(node.object);
+	    if (obj === FAIL) return FAIL;
+	    if (!obj) return obj;
+	    if (node.property.type === 'Identifier') {
+		return obj[node.property.name];
+	    }
+	    var prop = walk(node.property);
             if (prop === FAIL) return FAIL;
             return obj[prop];
         }
