@@ -82,7 +82,8 @@ module.exports = function (ast, scopeChain) {
         else if (node.type === 'MemberExpression') {
             var obj = walk(node.object);
             if (obj === FAIL) return FAIL;
-            if (node.property.type === 'Identifier' && obj) {
+            if (!obj) return obj;
+            if (node.property.type === 'Identifier') {
                 return obj[node.property.name];
             }
             var prop = walk(node.property);
