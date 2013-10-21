@@ -23,6 +23,14 @@ ScopeChain.prototype.has = function (name) {
     return false;
 }
 
+ScopeChain.prototype.host = function (name) {
+    for(var i =0; i<this.scopes.length; i++) {
+	if (name in this.scopes[i]) {
+	    return this.scopes[i];
+	}
+    }
+}
+
 test('resolved', function (t) {
     t.plan(1);
     
