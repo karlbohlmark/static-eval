@@ -67,6 +67,10 @@ module.exports = function (ast, scopeChain) {
             var callee = walk(node.callee)
             if (node.callee.type == 'MemberExpression') {
                 ctx = walk(node.callee.object)
+            } else if (node.callee.type == 'Identifier') {
+                ctx = scopeChain.host(node.callee.name);
+            } else {
+                console.warn('evaluating function with global context')
             }
             if (callee) {
                 var args = [];
