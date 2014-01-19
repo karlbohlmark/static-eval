@@ -1,7 +1,7 @@
 module.exports = function (ast, scopeChain) {
     if (!scopeChain) scopeChain = {
-	has: function () { return false; },
-	lookup: function () { return void(0); }
+    has: function () { return false; },
+    lookup: function () { return void(0); }
     };
     var FAIL = {};
     
@@ -73,34 +73,34 @@ module.exports = function (ast, scopeChain) {
             } else return FAIL;
         }
         else if (node.type === 'CallExpression') {
-	    var ctx = null
-	    var callee = walk(node.callee)
-	    if (node.callee.type == 'MemberExpression') {
-		ctx = walk(node.callee.object)
-	    } else if (node.callee.type == 'Identifier') {
-		ctx = scopeChain.host(node.callee.name);
-	    } else {
-		console.warn('evaluating function with global context')
-	    }
-	    if (callee) {
-		var args = [];
+            var ctx = null
+            var callee = walk(node.callee)
+            if (node.callee.type == 'MemberExpression') {
+                ctx = walk(node.callee.object)
+            } else if (node.callee.type == 'Identifier') {
+                ctx = scopeChain.host(node.callee.name);
+            } else {
+                console.warn('evaluating function with global context')
+            }
+            if (callee) {
+                var args = [];
                 for (var i = 0, l = node.arguments.length; i < l; i++) {
                     var x = walk(node.arguments[i]);
                     if (x === FAIL) return FAIL;
                     args.push(x);
                 }
-		return callee.apply(ctx, args);
+                return callee.apply(ctx, args);
             }
             else return FAIL;
         }
-	else if (node.type === 'MemberExpression') {
-	    var obj = walk(node.object);
-	    if (obj === FAIL) return FAIL;
-	    if (!obj) return obj;
-	    if (node.property.type === 'Identifier') {
-		return obj[node.property.name];
-	    }
-	    var prop = walk(node.property);
+        else if (node.type === 'MemberExpression') {
+            var obj = walk(node.object);
+            if (obj === FAIL) return FAIL;
+            if (!obj) return obj;
+            if (node.property.type === 'Identifier') {
+                return obj[node.property.name];
+            }
+            var prop = walk(node.property);
             if (prop === FAIL) return FAIL;
             return obj[prop];
         }
@@ -108,6 +108,14 @@ module.exports = function (ast, scopeChain) {
             var val = walk(node.test)
             if (val === FAIL) return FAIL;
             return val ? walk(node.consequent) : walk(node.alternate)
+        }
+        else if (node.type === 'ThisExpression') {
+            if (!scopeChain.tail) return head;
+            var o = scopeChain.tail
+            while (o.tail) {
+                o = o.tail
+            }
+            return o.head;
         }
         else return FAIL;
     })(ast);
