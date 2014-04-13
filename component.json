@@ -2,7 +2,7 @@
   "name": "static-eval",
   "repo": "karlbohlmark/static-eval",
   "description": "Evaulate simple js expressions",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "keywords": [],
   "dependencies": {},
   "development": {},
