@@ -39,7 +39,7 @@ module.exports = function (ast, scopeChain) {
             }
             return obj;
         }
-        else if (node.type === 'BinaryExpression') {
+        else if (node.type === 'BinaryExpression' || node.type == 'LogicalExpression') {
             var l = walk(node.left);
             if (l === FAIL) return FAIL;
             var r = walk(node.right);
