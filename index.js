@@ -110,7 +110,7 @@ module.exports = function (ast, scopeChain) {
             return val ? walk(node.consequent) : walk(node.alternate)
         }
         else if (node.type === 'ThisExpression') {
-            if (!scopeChain.tail) return head;
+            if (!scopeChain.tail) return scopeChain.head;
             var o = scopeChain.tail
             while (o.tail) {
                 o = o.tail
