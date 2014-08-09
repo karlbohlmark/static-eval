@@ -3,6 +3,16 @@ module.exports = function (ast, scopeChain) {
     has: function () { return false; },
     lookup: function () { return void(0); }
     };
+    // Hack to add the global constructor `Date`
+    // Todo: Remove and let user decide which globals
+    // should be available.
+    var s = scopeChain;
+    while (s.tail) {
+        s = s.tail
+    }
+    s.tail = new scopeChain.constructor({
+        "Date": Date
+    })
     var FAIL = {};
     
     var result = (function walk (node) {
@@ -116,6 +126,20 @@ module.exports = function (ast, scopeChain) {
                 o = o.tail
             }
             return o.head;
+        }
+        else if (node.type === 'NewExpression') {
+            var ctx = {}
+            var callee = walk(node.callee)
+            if (callee) {
+                var args = [null];
+                for (var i = 0, l = node.arguments.length; i < l; i++) {
+                    var x = walk(node.arguments[i]);
+                    if (x === FAIL) return FAIL;
+                    args.push(x);
+                }
+                return new (Function.prototype.bind.apply(callee, args));
+            }
+            else return FAIL;
         }
         else return FAIL;
     })(ast);
