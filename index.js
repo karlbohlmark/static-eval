@@ -3,16 +3,7 @@ module.exports = function (ast, scopeChain) {
     has: function () { return false; },
     lookup: function () { return void(0); }
     };
-    // Hack to add the global constructor `Date`
-    // Todo: Remove and let user decide which globals
-    // should be available.
-    var s = scopeChain;
-    while (s.tail) {
-        s = s.tail
-    }
-    s.tail = new scopeChain.constructor({
-        "Date": Date
-    })
+
     var FAIL = {};
     
     var result = (function walk (node) {
